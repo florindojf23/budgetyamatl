@@ -24,8 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-*usnh4b5u6-s6@xi^e5x5_ynj_ym$7#h9a4p&(+q3f4xd97y1q"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+DEBUG = False
+ALLOWED_HOSTS = ['budget.yamatl.com']
+CSRF_TRUSTED_ORIGINS = ['https://budget.yamatl.com']
+
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
@@ -142,9 +144,13 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
