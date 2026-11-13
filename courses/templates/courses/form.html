@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block headStyle %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12 order-2 order-sm-1 order-md-1">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ title }}</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="post" action="">
+                        {% csrf_token %}
+
+                        {{ form|crispy }}
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+
+                            <a href="javascript:history.back()"
+                               class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                <i class="bi bi-save"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    flatpickr("input[name='birth_date']", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+
+    flatpickr("input[name='start_date']", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+
+    flatpickr("input[name='end_date']", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+
+    flatpickr("input[name='payment_date']", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+
+});
+</script>
+{% endblock %}

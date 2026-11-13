@@ -1,0 +1,206 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <h5 class="card-title mb-0">
+                        Cohort Detail
+                    </h5>
+
+                    <a href="{% url 'cohort_update' cohort.id %}"
+                       class="btn btn-sm btn-outline-success">
+
+                        <i class="bi bi-pencil-square"></i> Edit
+
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <!-- Cohort Information -->
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <strong>Course</strong>
+
+                            <p>
+                                <a href="{% url 'course_detail' cohort.course.id %}"
+                                   class="text-primary fw-bold">
+                                    {{ cohort.course.name }}
+                                </a>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Cohort Name</strong>
+                            <p>{{ cohort.name }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Start Date</strong>
+                            <p>{{ cohort.start_date }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>End Date</strong>
+                            <p>{{ cohort.end_date|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Registration</strong>
+
+                            <p>
+                                {% if cohort.registration_open %}
+                                    <span class="badge bg-success">
+                                        Open
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        Closed
+                                    </span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Course Fee</strong>
+
+                            <p>
+                                ${{ cohort.course.fee|floatformat:2 }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- Summary -->
+                    <h5>Cohort Summary</h5>
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <small>Students</small>
+                                    <h4>{{ summary.student_count }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <small>Expected</small>
+                                    <h4>${{ expected|floatformat:2 }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <small>Paid</small>
+                                    <h4>${{ summary.amount_paid|floatformat:2 }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <small>Balance</small>
+                                    <h4>${{ balance|floatformat:2 }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- Students / Registrations -->
+                    <h5>Registered Students</h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-sm table-hover">
+
+                            <thead>
+                                <tr>
+                                    <th>Registration No</th>
+                                    <th>Student</th>
+                                    <th>Total Fee</th>
+                                    <th>Paid</th>
+                                    <th>Balance</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for registration in registrations %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ registration.student.reg_no }}
+                                    </td>
+
+                                    <td>
+                                        <a href="{% url 'registration_detail' registration.id %}"
+                                           class="text-primary fw-bold">
+                                            {{ registration.student.full_name }}
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        ${{ registration.total_fee|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        ${{ registration.amount_paid|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        ${{ registration.balance|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        {{ registration.payment_status }}
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        No student registered in this cohort.
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

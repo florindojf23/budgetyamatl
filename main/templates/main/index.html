@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+<div class="pagetitle">
+  <h1>{{ legend }}</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active">{{ legend }}</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+
+  <div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+        <h1>{{ group|upper }}</h1>
+      </div><!-- end row-->
+
+    </div><!-- End Left side columns -->
+    
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "konfigurasaun.html" %}
+{% block config_content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-pencil-square"></i>
+                Edit Sub Entidade
+            </div>
+
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Entidade</label>
+                        <select class="form-control" name="entity" required>
+                            {% for e in entities %}
+                                <option value="{{ e.id }}"
+                                    {% if e.id == subentity.entity.id %}selected{% endif %}>
+                                    {{ e.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Naran Sub Entidade</label>
+                        <input type="text" class="form-control"
+                               name="name" value="{{ subentity.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Sigla</label>
+                        <input type="text" class="form-control"
+                               name="sigla" value="{{ subentity.sigla }}" required>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'config-sub-entity' %}"
+                           class="btn btn-secondary btn-sm">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

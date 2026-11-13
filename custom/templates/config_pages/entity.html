@@ -1,0 +1,88 @@
+{% extends "konfigurasaun.html" %}
+{% load crispy_forms_tags %}
+{% block config_content %}
+
+<div class="card-header d-flex justify-content-end">
+    <div class="flex items-center">
+        {% if entity_active %}
+        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered"><i class="bi bi-plus-circle-fill"></i> Add {{page}}</a>
+        {% elif entity_active %}
+        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered"><i class="bi bi-plus-circle-fill"></i> Add {{page}}</a>
+        {%endif%}
+        
+    </div>
+</div>
+<div class="card-body">
+    {% if page == 'Entidade' %}
+        <table class="table table-hover table-md mt-2 table-striped">
+            <thead>
+                <tr>
+                    <td>Nu</td>
+                    <td>Naran Entidade</td>
+                    <td>Sigla</td>
+                    <td>Ativu</td>
+                    <td>Aksaun</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in objects %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.sigla}}</td>
+                    <td>{{i.is_active}}</td>
+                    <td>
+                      <a href="{% url 'config-edit-entity' i.id %}" class="btn btn-sm btn-warning">
+                          <i class="bi bi-pencil-square"></i>
+                      </a>
+                      <!-- <a href="{% url 'config-delete-entity' i.id %}" class="btn btn-sm btn-danger" 
+                        onclick="return confirm('Delete this Entity?')">
+                          <i class="bi bi-trash"></i>
+                      </a> -->
+                  </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif page == 'Entidade' %}
+        
+    {% elif page == 'form' %}
+      {% csrf_token %}
+      {% crispy form %}
+    {% endif %}
+</div>
+<!-- modal -->
+<div class="modal fade" id="verticalycentered" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Formulariu Rejistu {{page}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        {% if entity_active %}
+        <form class="form" action="{% url 'config-add-entity' %}" method="POST">
+        {% elif entity_active %}
+        <form class="form" action="{% url 'config-add-entity' %}" method="POST">
+        {%endif%}
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="col-12">
+              <label for="inputNanme4" class="form-label">Entidade</label>
+              <input type="text" class="form-control" name="entity" id="inputNanme4" required>
+              <label for="inputsigla" class="form-label">Sigla</label>
+              <input type="text" class="form-control" name="sigla" id="inputsigla" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="text-end mt-2">
+              <button type="submit" class="btn btn-sm btn-primary">Save</button>
+              <button data-bs-dismiss="modal" type="button" class="btn btn-sm btn-secondary">Reset</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+</div><!-- End Vertically centered Modal-->
+
+{% endblock config_content %}

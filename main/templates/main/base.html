@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  {% if title %}
+    <title>YamaTL Budget {{ title }}</title>
+  {% else %}
+    <title>YamaTL Budget</title>
+  {% endif %}
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{{cores.logo.url}}" rel="icon">
+  <link href="{{cores.logo.url}}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'main/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'main/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'main/assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'main/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <!-- Template Main CSS File -->
+  <link href="{% static 'main/assets/css/style.css' %}" rel="stylesheet">
+
+  {% block headStyle %}
+  {% endblock headStyle %}
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.2.2
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    {% include 'main/header.html' %}
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+    {% include 'main/sidebar.html' %}
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{title}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard2' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">{% if request.session.previous_url %}
+    <a href="{{ request.session.previous_url }}">Pajina Anterior</a>
+{% endif %}</li>
+
+          <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+      </nav>
+    </div>
+    <section class="section dashboard">
+      {% if messages %}
+      {% for message in messages %} 
+          
+          <div class="d-flex justify-content-between align-items-center  alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            <div class="d-flex justify-content-between align-items-center">
+              {% if message.tags == 'success' %}
+              <i class="bi bi-check-circle me-3"></i>
+              {% elif message.tags == 'warning' or message.tags == 'error'  %}
+              <i class="bi bi-exclamation-octagon me-3"></i>
+              {%endif%}
+              {{message}}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      {% endfor %}
+      {% endif %}
+      {% block content %}
+      {% endblock %}
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>MESCC-DNCT</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Developed by <a href="mailto:florindojuniorfernandes@gmail.com">FlorindoJF23</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'main/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'main/assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'main/assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <!-- Datatable -->
+  
+  <!-- Template Main JS File -->
+  <script src="{% static 'main/assets/js/main.js' %}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

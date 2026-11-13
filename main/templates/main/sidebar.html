@@ -1,0 +1,23 @@
+<ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'dashboard2' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <!-- End Dashboard Nav -->
+
+    {% if user.is_authenticated %}
+			{% if user.groups.all.0.name == 'patient' %}
+				{% include 'main/patient.html' %}
+      {% elif user.groups.all.0.name == 'doctor' %}
+        {% include 'main/doctor.html' %}
+      {% elif user.groups.all.0.name == 'clinic' %}
+        {% include 'main/clinic.html' %}
+			{% else %}
+				{% include 'main/admin.html' %}
+			{% endif %}
+		{% endif %}
+
+  </ul>

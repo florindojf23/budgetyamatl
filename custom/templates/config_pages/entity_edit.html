@@ -1,0 +1,38 @@
+{% extends "konfigurasaun.html" %}
+{% block config_content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-pencil-square"></i> Edit Entity
+            </div>
+
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Naran Entidade</label>
+                        <input type="text" class="form-control" name="name" value="{{ entity.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Sigla</label>
+                        <input type="text" class="form-control" name="sigla" value="{{ entity.sigla }}" required>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'config-entity' %}" class="btn btn-secondary btn-sm">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

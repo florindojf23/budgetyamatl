@@ -1,0 +1,147 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<section class="section">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        Student Detail
+                    </h5>
+
+                    <a href="{% url 'student_update' student.id %}"
+                       class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit
+                    </a>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <strong>Registration No</strong>
+                            <p>{{ student.reg_no }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Full Name</strong>
+                            <p>{{ student.full_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                        <strong>Sex</strong>
+                        <p>{{ student.get_sex_display|default:"-" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Education Semester</strong>
+                            <p>{{ student.education_semester|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Study Program</strong>
+                            <p>{{ student.study_program|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Birth Date</strong>
+                            <p>{{ student.birth_date|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Email</strong>
+                            <p>{{ student.email|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Phone</strong>
+                            <p>{{ student.phone|default:"-" }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Address</strong>
+                            <p>{{ student.address|default:"-" }}</p>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <h5>Registration History</h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Cohort</th>
+            <th>Total Fee</th>
+            <th>Paid</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th>Receipt</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for registration in registrations %}
+        <tr>
+            <td>
+                <a href="{% url 'registration_detail' registration.id %}"
+                   class="text-primary fw-bold">
+                    {{ registration.cohort.course.name }}
+                </a>
+            </td>
+
+            <td>{{ registration.cohort.name }}</td>
+
+            <td>
+                ${{ registration.total_fee|floatformat:2 }}
+            </td>
+
+            <td>
+                ${{ registration.amount_paid|floatformat:2 }}
+            </td>
+
+            <td>
+                ${{ registration.balance|floatformat:2 }}
+            </td>
+
+            <td>
+                {{ registration.payment_status }}
+            </td>
+
+            <td>
+                <a href="{% url 'registration_receipt_pdf' registration.id %}"
+                   target="_blank"
+                   class="btn btn-sm btn-outline-primary"
+                   title="Print Payment Receipt">
+                    <i class="bi bi-printer"></i>
+                </a>
+            </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="7" class="text-center">
+                No registration found.
+            </td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock content %}

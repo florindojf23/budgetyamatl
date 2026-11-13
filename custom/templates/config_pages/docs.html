@@ -1,0 +1,111 @@
+{% extends "konfigurasaun.html" %}
+{% load crispy_forms_tags %}
+{% block config_content %}
+
+<div class="card-header d-flex justify-content-end">
+    <div class="flex items-center">
+        {% if doctype_active %}
+        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered"><i class="bi bi-plus-circle-fill"></i> Add {{page}}</a>
+        {% elif doccat_active %}
+        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered"><i class="bi bi-plus-circle-fill"></i> Add {{page}}</a>
+        {%endif%}
+        
+    </div>
+</div>
+<div class="card-body">
+    {% if page == 'Tipu Dokumentu' %}
+        <table class="table table-hover table-md mt-2 table-striped">
+            <thead>
+                <tr>
+                    <td>Nu</td>
+                    <td>Tipu Dokumentu</td>
+                    <td>Ativu</td>
+                    <td>Aksaun</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in objects %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.is_active}}</td>
+                    <td>
+                    <a href="{% url 'config-edit-docs-type' i.id %}" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <!-- <a href="{% url 'config-delete-docs-type' i.id %}" class="btn btn-sm btn-danger" 
+                    onclick="return confirm('Delete this Docs Type?')">
+                        <i class="bi bi-trash"></i>
+                    </a> -->
+                </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif page == 'Kategoria Dokumentu' %}
+        <table class="table table-hover table-md mt-2 table-striped">
+            <thead>
+                <tr>
+                    <td>Nu</td>
+                    <td>Kategoria Dokumentu</td>
+                    <td>Ativu</td>
+                    <td>Aksaun</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in objects %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.is_active}}</td>
+                    <td>
+                    <a href="{% url 'config-edit-docs-category' i.id %}" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <!-- <a href="{% url 'config-delete-docs-category' i.id %}" class="btn btn-sm btn-danger" 
+                    onclick="return confirm('Delete this Docs Category?')">
+                        <i class="bi bi-trash"></i>
+                    </a> -->
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif page == 'form' %}
+      {% csrf_token %}
+      {% crispy form %}
+    {% endif %}
+</div>
+<!-- modal -->
+<div class="modal fade" id="verticalycentered" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Formulariu Rejistu {{page}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        {% if doctype_active %}
+        <form class="form" action="{% url 'config-add-doc-types' %}" method="POST">
+        {% elif doccat_active %}
+        <form class="form" action="{% url 'config-add-doc-category' %}" method="POST">
+        {%endif%}
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="col-12">
+              <label for="inputNanme4" class="form-label">{{title}}</label>
+              <input type="text" class="form-control" name="docType" id="inputNanme4" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="text-end mt-2">
+              <button type="submit" class="btn btn-sm btn-primary">Save</button>
+              <button data-bs-dismiss="modal" type="button" class="btn btn-sm btn-secondary">Reset</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+</div><!-- End Vertically centered Modal-->
+
+{% endblock config_content %}

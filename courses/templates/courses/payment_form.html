@@ -1,0 +1,102 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        {% if editing_payment %}
+                            Edit Payment {{ payment_index|add:"1" }}
+                        {% else %}
+                            Add Payment
+                        {% endif %}
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <strong>Student</strong>
+                            <div>{{ registration.student.full_name }}</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Course</strong>
+                            <div>{{ registration.cohort.course.name }}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-4">
+                            <strong>Total Fee</strong>
+                            <div>
+                                ${{ registration.total_fee|floatformat:2 }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Already Paid</strong>
+                            <div>
+                                ${{ registration.amount_paid|floatformat:2 }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Remaining Balance</strong>
+                            <div>
+                                ${{ registration.balance|floatformat:2 }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {{ form|crispy }}
+
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+
+                            <a href="{% url 'registration_detail' registration.id %}"
+                               class="btn btn-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                {% if editing_payment %}
+                                    <i class="bi bi-check-circle"></i>
+                                    Update Payment
+                                {% else %}
+                                    <i class="bi bi-cash-stack"></i>
+                                    Add Payment
+                                {% endif %}
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,127 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block headStyle %}
+<link href="{% static 'main/datatables/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12 order-2 order-sm-1 order-md-1">
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-end gap-2">
+                    <div class="flex items-center">
+                        <a href="{% url 'course_create' %}"
+                           class="btn btn-sm btn-primary"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="Rejistu Kursu Foun">
+                            <i class="bi bi-file-earmark-plus"></i>
+                            Rejistu
+                        </a>
+                        <a href="{% url 'course_export_excel' %}"
+                            class="btn btn-sm btn-success"
+                            data-bs-toggle="tooltip"
+                            title="Export Excel">
+                                <i class="bi bi-file-earmark-excel"></i>
+                                Excel
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body py-3">
+                    <div class="table-responsive">
+
+                        <table id="document-table" class="table table-sm">
+                            <thead>
+                                <tr class="fw-bolder text-muted">
+                                    <th class="min-w-100px">Code</th>
+                                    <th class="min-w-200px">Naran Kursu</th>
+                                    <th class="min-w-110px">Fee</th>
+                                    <th class="min-w-100px">Status</th>
+                                    <th class="min-w-100px">Estudante</th>
+                                    <th class="min-w-100px">Aksaun</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'main/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'main/datatables/js/jquery.dataTables.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'main/datatables/js/dataTables.bootstrap4.min.js' %}" type="text/javascript"></script>
+
+<script>
+$(document).ready(function () {
+    $('#document-table').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+
+        ajax: {
+            url: "{% url 'Course_serverside_data' %}"
+        },
+
+        columns: [
+            { data: "code" },
+            // { data: "name" },
+            {
+    data: "name",
+    render: function(data, type, row) {
+        if (type === "display") {
+            return '<a href="{% url "course_detail" 0 %}"'.replace("0", row.id) +
+                   ' class="text-primary fw-bold">' + data + '</a>';
+        }
+        return data;
+    }
+},
+
+            {
+                data: "fee",
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        return '$' + parseFloat(data || 0).toFixed(2);
+                    }
+                    return data;
+                }
+            },
+
+            { data: "active" },
+            { data: "student_count" },
+
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                defaultContent:
+                    "<a href='#' class='btn-update btn btn-sm btn-outline-success'>" +
+                    "<i class='bi bi-pencil-square'></i>" +
+                    "</a>"
+            }
+        ],
+
+        pageLength: 10,
+
+        rowCallback: function(row, data) {
+            $(row).find('.btn-update').on('click', function(e) {
+                e.stopPropagation();
+                window.location.href =
+                    "{% url 'course_update' 0 %}".replace('0', data.id);
+            });
+        }
+    });
+});
+</script>
+
+{% endblock content %}
+
+{% block script %}
+{% endblock %}

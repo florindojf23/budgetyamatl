@@ -1,0 +1,102 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12 order-2 order-sm-1 order-md-1">
+            <div class="card">
+               <!-- <div class="card-header d-flex justify-content-end">
+				    <div class="flex items-center">
+				        <a href="{% url 'ArchivalAdd' %}" class="btn btn-sm btn-primary"><i class="bi bi-file-earmark-plus"></i> Rejistu Arkivu</a>
+				    </div>
+				</div> -->
+				<div class="card-body py-3">
+					<div class="row pt-5">
+						<div class="col-lg-6 mb-4">
+			              	<div class="accordion" id="accordionExample">
+				                <div class="accordion-item">
+				                  <h2 class="accordion-header" id="headingOne">
+				                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				                      Informasaun Detallu
+				                    </button>
+				                  </h2>
+				                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+				                    <div class="accordion-body">
+				                      <table class="table">
+				                      	<tr><th>Numeru Dokumentu</th><td>{{objects.doc_number}}</td></tr>
+				                      	<tr><th>Funcionariu/Responsavel</th><td>{{objects.employee}}</td></tr>
+				                      	<tr><th>Entidade</th><td>{{objects.entity}}</td></tr>
+				                      	<tr><th>Assuntu</th><td>{{objects.name}}</td></tr>
+				                      	<tr><th>Data</th><td>{{objects.doc_date}}</td></tr>
+				                      </table>
+				                    </div>
+				                  </div>
+				                </div>
+				                <div class="accordion-item">
+				                  <h2 class="accordion-header" id="headingTwo">
+				                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				                      Kategoria Dokumentu
+				                    </button>
+				                  </h2>
+				                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+				                    <div class="accordion-body">
+				                      	<div class="alert alert-success alert-dismissible fade show" role="alert">
+							                <i class="bi bi-check-circle me-1"></i>
+							                {{objects.category.name}}
+						              	</div>
+				                    </div>
+				                  </div>
+				                </div>
+				                <div class="accordion-item">
+				                  <h2 class="accordion-header" id="headingThree">
+				                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+				                      Tipu Dokumentu
+				                    </button>
+				                  </h2>
+				                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+				                    <div class="accordion-body">
+				                      <div class="accordion-body">
+				                      	<div class="alert alert-success alert-dismissible fade show" role="alert">
+							                <i class="bi bi-check-circle me-1"></i>
+							                {{objects.doc_type.name}}
+						              	</div>
+				                    </div>
+				                    </div>
+				                  </div>
+				                </div>
+			              	</div>
+	              		</div>
+						<div class="col-lg-6" style="height: 600px;">
+							<div id="pdfviewer" style="height:100%"></div>
+
+							<script src="{% static 'main/assets/js/pdfobject.js' %}"></script>
+
+							{% if objects.filename %}
+								<script>
+									PDFObject.embed("{{ objects.filename.url }}", "#pdfviewer");
+								</script>
+							{% else %}
+								<p>No document uploaded</p>
+							{% endif %}
+						</div>
+
+	              		<!-- <div class="col-lg-6" style="height: 600px;">
+	              			<div id="pdfviewer" style="height:100%"></div>
+	              			<script src="{% static 'main/assets/js/pdfobject.js' %}"></script>
+                    		<script>PDFObject.embed("{{objects.filename.url}}", "#pdfviewer");</script>
+	              		</div> -->
+
+	              	</div>
+					
+				</div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+{% endblock content %}
+{% block script %}
+	
+{% endblock %}
+

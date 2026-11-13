@@ -1,0 +1,89 @@
+{% extends "main/base.html" %}
+{% block content %}
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-9 order-2 order-sm-1 order-md-1">
+            <div class="card">
+                {% block config_content %}
+                {% endblock config_content %}
+            </div>
+        </div>
+        <div class="container col-lg-3 order-1 order-sm-2 order-md-2">
+                <div class="d-lg-none bg-primary rounded d-flex items-center mb-2" id=""  data-toggle="collapse" data-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse">
+                        <a class="btn btn-link text-light" style="text-decoration:none">
+                            {{page}}
+                        </a>
+                    <span class="items-center" style="margin-left:-13px;margin-top:6px">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path></svg>
+                    </span>
+                </div>
+                <div id="menuCollapse" class="collapse d-lg-block" aria-labelledby="menuHeading">
+                    <div class="mb-2" id="menuContent">
+                        <ul class="list-group">
+                            <a href="{% url  'config-dash' %}" class="{% if owner_active %}text-light{%else%}text-muted{%endif%}">
+                            <li class="list-group-item {{owner_active}}">
+                                
+                                    <i class="bi bi-person-lines-fill"></i>
+                                Owner
+                            </li>
+                            </a>
+                            <a href="{% url  'config-doc-types' %}" class="{% if doctype_active %}text-light{%else%}text-muted{%endif%}">    
+                            <li class="list-group-item {{doctype_active}}">
+                                    <i class="bi bi-file-earmark-medical"></i>
+                                Tipu Dokumentu
+                            </li>
+                            </a>
+                            <a href="{% url  'config-doc-cat' %}" class="{% if doccat_active %}text-light{%else%}text-muted{%endif%}">
+                                <li class="list-group-item {{doccat_active}}">
+                                    <i class="bi bi-file-earmark-ruled"></i>
+                                    Kategoria Dokumentu
+                                 </li>
+                            </a>
+                            <a href="{% url  'config-entity' %}" class="{% if entity_active %}text-light{%else%}text-muted{%endif%}">
+                                <li class="list-group-item {{entity_active}}">
+                                    <i class="bi bi-file-earmark-ruled"></i>
+                                    Entidade
+                                 </li>
+                            </a>
+                            <a href="{% url  'config-sub-entity' %}" class="{% if sub_entity_active %}text-light{%else%}text-muted{%endif%}">
+                                <li class="list-group-item {{sub_entity_active}}">
+                                    <i class="bi bi-file-earmark-ruled"></i>
+                                    Sub Entidade
+                                 </li>
+                            </a>
+                            <a href="{% url  'config-funcionariu' %}" class="{% if funcionariu_active %}text-light{%else%}text-muted{%endif%}">
+                                <li class="list-group-item {{funcionariu_active}}">
+                                    <i class="bi bi-people"></i>
+                                    Funsionario
+                                 </li>
+                            </a>
+                            <!-- Add more menu items as needed -->
+                        </ul>
+                    </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function(){
+        $('#menuCollapse').on('shown.bs.collapse', function () {
+            $('#menuContent').removeClass('d-none');
+        });
+
+        $('#menuCollapse').on('hidden.bs.collapse', function () {
+            $('#menuContent').addClass('d-none');
+        });
+    });
+</script>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

@@ -1,0 +1,655 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="section">
+
+    <!-- ================================= -->
+    <!-- DASHBOARD HEADER -->
+    <!-- ================================= -->
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <h4 class="fw-bold">YamaTL Dashboard</h4>
+            <p class="text-muted">
+                Course Registration & Financial Management Overview
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ================================= -->
+
+    <div class="row">
+
+        <!-- TOTAL STUDENTS -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Total Students</h6>
+                            <h3 class="fw-bold">{{ total_students }}</h3>
+                        </div>
+                        <i class="bi bi-people fs-1 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL COURSES -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Total Courses</h6>
+                            <h3 class="fw-bold">{{ total_courses }}</h3>
+                        </div>
+                        <i class="bi bi-book fs-1 text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL COHORTS -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Total Batches</h6>
+                            <h3 class="fw-bold">{{ total_cohorts }}</h3>
+                        </div>
+                        <i class="bi bi-collection fs-1 text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL REGISTRATIONS -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Registrations</h6>
+                            <h3 class="fw-bold">{{ total_registrations }}</h3>
+                        </div>
+                        <i class="bi bi-file-earmark-text fs-1 text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPECTED REVENUE -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Expected Revenue</h6>
+                            <h3 class="fw-bold">
+                                ${{ expected_revenue|floatformat:2 }}
+                            </h3>
+                        </div>
+                        <i class="bi bi-cash-stack fs-1 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL COLLECTED -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Total Collected</h6>
+                            <h3 class="fw-bold text-success">
+                                ${{ total_collected|floatformat:2 }}
+                            </h3>
+                        </div>
+                        <i class="bi bi-wallet2 fs-1 text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OUTSTANDING BALANCE -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Outstanding Balance</h6>
+                            <h3 class="fw-bold text-danger">
+                                ${{ outstanding_balance|floatformat:2 }}
+                            </h3>
+                        </div>
+                        <i class="bi bi-exclamation-circle fs-1 text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FULLY PAID -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted">Fully Paid</h6>
+                            <h3 class="fw-bold text-success">
+                                {{ paid_count }}
+                            </h3>
+                        </div>
+                        <i class="bi bi-check-circle fs-1 text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- CHARTS -->
+    <!-- ================================= -->
+
+    <div class="row">
+
+        <!-- MONTHLY PAYMENT CHART -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Monthly Payment Collection
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div style="height: 320px;">
+                        <canvas id="monthlyPaymentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAYMENT STATUS CHART -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Payment Status
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div style="height: 320px;">
+                        <canvas id="paymentStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- REGISTRATIONS BY COURSE -->
+    <!-- ================================= -->
+
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Registrations by Course
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div style="height: 350px;">
+                        <canvas id="courseRegistrationChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- COURSE PERFORMANCE TABLE -->
+    <!-- ================================= -->
+
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Course Financial Performance
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-sm table-hover">
+
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Registrations</th>
+                                    <th>Expected Revenue</th>
+                                    <th>Collected</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for item in course_performance %}
+
+                                <tr>
+
+                                    <td>
+                                        <a href="{% url 'course_detail' item.course.id %}">
+                                            {{ item.course.name }}
+                                        </a>
+                                    </td>
+
+                                    <td>{{ item.students }}</td>
+
+                                    <td>
+                                        ${{ item.expected|floatformat:2 }}
+                                    </td>
+
+                                    <td class="text-success">
+                                        ${{ item.collected|floatformat:2 }}
+                                    </td>
+
+                                    <td class="text-danger">
+                                        ${{ item.balance|floatformat:2 }}
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        No course data available.
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- RECENT REGISTRATIONS & PAYMENTS -->
+    <!-- ================================= -->
+
+    <div class="row">
+
+        <!-- RECENT REGISTRATIONS -->
+        <div class="col-lg-7">
+
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <h5 class="card-title mb-0">
+                        Recent Registrations
+                    </h5>
+
+                    <a href="{% url 'registration_list' %}"
+                       class="btn btn-sm btn-primary">
+                        View All
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-sm table-hover">
+
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Total Fee</th>
+                                    <th>Paid</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for registration in recent_registrations %}
+
+                                <tr>
+
+                                    <td>
+                                        <a href="{% url 'student_detail' registration.student.id %}">
+                                            {{ registration.student.full_name }}
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        {{ registration.cohort.course.name }}
+                                    </td>
+
+                                    <td>
+                                        ${{ registration.total_fee|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        ${{ registration.amount_paid|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+
+                                        {% if registration.payment_status == "Paid" %}
+                                            <span class="badge bg-success">
+                                                Paid
+                                            </span>
+
+                                        {% elif registration.payment_status == "Partial" %}
+                                            <span class="badge bg-warning text-dark">
+                                                Partial
+                                            </span>
+
+                                        {% else %}
+                                            <span class="badge bg-danger">
+                                                Unpaid
+                                            </span>
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        No registrations found.
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT PAYMENTS -->
+        <div class="col-lg-5">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Recent Payments
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-sm table-hover">
+
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for payment in recent_payments %}
+
+                                <tr>
+
+                                    <td>
+                                        <a href="{% url 'registration_detail' payment.registration.id %}">
+                                            {{ payment.student.full_name }}
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        {{ payment.date|date:"d M Y" }}
+                                    </td>
+
+                                    <td class="text-success">
+                                        ${{ payment.amount|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        {{ payment.method }}
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        No payments found.
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================================= -->
+<!-- CHART DATA -->
+<!-- ================================= -->
+
+{{ monthly_labels|json_script:"monthly-labels" }}
+{{ monthly_values|json_script:"monthly-values" }}
+{{ course_labels|json_script:"course-labels" }}
+{{ course_students|json_script:"course-students" }}
+
+
+<!-- ================================= -->
+<!-- CHART.JS -->
+<!-- ================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Django data
+    const monthlyLabels = JSON.parse(
+        document.getElementById("monthly-labels").textContent
+    );
+
+    const monthlyValues = JSON.parse(
+        document.getElementById("monthly-values").textContent
+    );
+
+    const courseLabels = JSON.parse(
+        document.getElementById("course-labels").textContent
+    );
+
+    const courseStudents = JSON.parse(
+        document.getElementById("course-students").textContent
+    );
+
+
+    // =================================
+    // MONTHLY PAYMENT COLLECTION
+    // =================================
+
+    new Chart(
+        document.getElementById("monthlyPaymentChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: monthlyLabels,
+
+                datasets: [{
+                    label: "Payments Collected ($)",
+                    data: monthlyValues,
+                    backgroundColor: "#435ebe",
+                    borderRadius: 5
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+    );
+
+
+    // =================================
+    // PAYMENT STATUS
+    // =================================
+
+    new Chart(
+        document.getElementById("paymentStatusChart"),
+        {
+            type: "doughnut",
+
+            data: {
+                labels: ["Paid", "Partial", "Unpaid"],
+
+                datasets: [{
+                    data: [
+                        {{ paid_count }},
+                        {{ partial_count }},
+                        {{ unpaid_count }}
+                    ],
+
+                    backgroundColor: [
+                        "#198754",
+                        "#ffc107",
+                        "#dc3545"
+                    ]
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        }
+    );
+
+
+    // =================================
+    // REGISTRATIONS BY COURSE
+    // =================================
+
+    new Chart(
+        document.getElementById("courseRegistrationChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: courseLabels,
+
+                datasets: [{
+                    label: "Total Registrations",
+                    data: courseStudents,
+                    backgroundColor: "#20c997",
+                    borderRadius: 5
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                indexAxis: "y",
+
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+
+});
+
+</script>
+
+{% endblock content %}

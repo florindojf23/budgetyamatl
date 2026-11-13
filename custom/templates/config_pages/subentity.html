@@ -1,0 +1,86 @@
+{% extends "konfigurasaun.html" %}
+{% block config_content %}
+
+<div class="card-header d-flex justify-content-end">
+    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+        <i class="bi bi-plus-circle-fill"></i> Add {{ page }}
+    </a>
+</div>
+
+<div class="card-body">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nu</th>
+                <th>Entidade</th>
+                <th>Sub Entidade</th>
+                <th>Sigla</th>
+                <th>Ativu</th>
+                <th>Aksaun</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in objects %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.entity }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.sigla }}</td>
+                <td>{{ i.is_active }}</td>
+                <td>
+                <a href="{% url 'config-edit-sub-entity' i.id %}" class="btn btn-sm btn-warning">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+              </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No data</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="verticalycentered" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <form method="POST" action="{% url 'config-add-sub-entity' %}">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Formulariu Rejistu {{ page }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <label class="form-label">Entidade</label>
+                    <select class="form-control" name="entity" required>
+                        <option value="">--- Hili Entidade ---</option>
+                        {% for e in entities %}
+                            <option value="{{ e.id }}">{{ e.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label class="form-label mt-2">Naran Sub Entidade</label>
+                    <input type="text" class="form-control" name="name" required>
+
+                    <label class="form-label mt-2">Sigla</label>
+                    <input type="text" class="form-control" name="sigla" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
