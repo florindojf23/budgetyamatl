@@ -59,7 +59,7 @@ pyHanko==0.32.0
 pyhanko-certvalidator==0.29.0
 PyMySQL==1.1.2
 pypdf==6.6.0
-python-bidi==0.4.2
+python-bidi>=0.5.0
 python-dateutil==2.9.0.post0
 python-ipware==3.0.0
 pytz==2025.2
