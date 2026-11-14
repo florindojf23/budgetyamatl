@@ -24,8 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-*usnh4b5u6-s6@xi^e5x5_ynj_ym$7#h9a4p&(+q3f4xd97y1q"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['budget.yamatl.com']
+# DEBUG = False
+# ALLOWED_HOSTS = ['budget.yamatl.com']
+
+DEBUG = os.environ.get('DJANGO_DEBUG') == '1'
+ALLOWED_HOSTS = ['budget.yamatl.com', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://budget.yamatl.com']
 
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
