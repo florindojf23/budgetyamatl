@@ -23,8 +23,8 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path('login/', loginPage, name='login'),
+    path("admin/", admin.site.urls),
     path('', RedirectView.as_view(pattern_name='dashboard2', permanent=False)),
     path('logout/', auth_views.LogoutView.as_view(template_name='auth/logout.html'), name='logout'),
     path("", include('main.urls')),

@@ -12,23 +12,27 @@ from courses.models import *
 def index(request):
     return render(request,'main/index.html')
 
-
 def loginPage(request):
-	cores = Core.objects.filter(is_active=True).first()
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
+    cores = Core.objects.filter(is_active=True).first()
 
-		user = authenticate(request,username=username,password=password)
+    if request.user.is_authenticated:
+        return redirect('dashboard2')
 
-		if user is not None:
-			login(request,user)
-			AuditLogin.objects.create(user=request.user)
-			return redirect('dashboard2')
-		else:
-			messages.error(request,'Username ou Password la loos! Favor Prense fali!')
-	context = {
-		"title":"Pajina Login",
-		"cores":cores,
-	}
-	return render(request,'auth/login.html',context)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            AuditLogin.objects.create(user=user)
+            return redirect('dashboard2')
+        else:
+            messages.error(request, 'Username ou Password la loos! Favor Prense fali!')
+
+    context = {
+        "title": "Pajina Login",
+        "cores": cores,
+    }
+    return render(request, 'auth/login.html', context)

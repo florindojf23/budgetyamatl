@@ -5,4 +5,5 @@ from courses.views import *
 
 urlpatterns = [
     path("", index,name='dashboard2'),
+    
 ]

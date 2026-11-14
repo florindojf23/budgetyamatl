@@ -4,6 +4,7 @@ from django.db.models import Count, Sum, F, DecimalField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.functions import Coalesce
 from .models import Course, Cohort, Student, Registration
@@ -14,13 +15,15 @@ from django.utils import timezone
 from datetime import datetime
 from collections import defaultdict
 from datetime import date
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A5, landscape
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 
-
+@login_required(login_url='login')
 def dashboard(request):
     courses = Course.objects.annotate(
         student_count=Count("cohorts__registrations", distinct=True),
@@ -57,6 +60,7 @@ def dashboard(request):
 
     return render(request, "courses/dashboard.html", context)
 
+@login_required
 def dashboard2(request):
 
     # ==========================================
@@ -242,7 +246,7 @@ def dashboard2(request):
 
     return render(request, "courses/dashboard.html", context)
 
-
+@login_required
 def course_list(request):
     courses = Course.objects.annotate(
         student_count=Count("cohorts__registrations", distinct=True),
@@ -251,6 +255,7 @@ def course_list(request):
 
     return render(request, "courses/course_list.html", {"courses": courses})
 
+@login_required
 def course_create(request):
     if request.method == "POST":
         form = CourseForm(request.POST)
@@ -268,7 +273,7 @@ def course_create(request):
         {"form": form, "title": "New Course"},
     )
 
-
+@login_required
 def course_update(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
@@ -288,7 +293,7 @@ def course_update(request, pk):
         {"form": form, "course": course, "title": "Edit Course"},
     )
 
-
+@login_required
 def course_delete(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
@@ -303,6 +308,7 @@ def course_delete(request, pk):
         {"course": course},
     )
 
+@login_required
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
@@ -337,7 +343,7 @@ def course_detail(request, pk):
         "registrations": registrations,
     })
 
-
+@login_required
 def course_export_excel(request):
     workbook = Workbook()
     worksheet = workbook.active
@@ -373,7 +379,7 @@ def course_export_excel(request):
 
     return response
 
-
+@login_required
 def cohort_list(request):
     cohorts = Cohort.objects.select_related("course").annotate(
         student_count=Count("registrations", distinct=True),
@@ -389,7 +395,7 @@ def cohort_list(request):
         {"cohorts": cohorts}
     )
 
-
+@login_required
 def cohort_create(request):
     if request.method == "POST":
         form = CohortForm(request.POST)
@@ -407,7 +413,7 @@ def cohort_create(request):
         {"form": form, "title": "New Cohort"},
     )
 
-
+@login_required
 def cohort_update(request, pk):
     cohort = get_object_or_404(Cohort, pk=pk)
 
@@ -431,7 +437,7 @@ def cohort_update(request, pk):
         },
     )
 
-
+@login_required
 def cohort_delete(request, pk):
     cohort = get_object_or_404(Cohort, pk=pk)
 
@@ -446,6 +452,7 @@ def cohort_delete(request, pk):
         {"cohort": cohort},
     )
 
+@login_required
 def cohort_detail(request, pk):
     cohort = get_object_or_404(
         Cohort.objects.select_related("course"),
@@ -480,6 +487,7 @@ def cohort_detail(request, pk):
         "balance": balance,
     })
 
+@login_required
 def cohort_export_excel(request):
     workbook = Workbook()
     worksheet = workbook.active
@@ -517,7 +525,7 @@ def cohort_export_excel(request):
 
     return response
 
-
+@login_required
 def registration_create(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
@@ -538,6 +546,7 @@ def registration_create(request):
         {"form": form, "title": "New Registration"},
     )
 
+@login_required
 def registration_list(request):
     registrations = Registration.objects.select_related(
         "student", "cohort", "cohort__course"
@@ -563,7 +572,7 @@ def registration_list(request):
 
     return render(request, "courses/registo_list.html", context)
 
-
+@login_required
 def registration_update(request, pk):
     registration = get_object_or_404(Registration, pk=pk)
 
@@ -583,7 +592,7 @@ def registration_update(request, pk):
         "title": "Edit Registration",
     })
 
-
+@login_required
 def registration_delete(request, pk):
     registration = get_object_or_404(Registration, pk=pk)
 
@@ -596,6 +605,7 @@ def registration_delete(request, pk):
         "registration": registration,
     })
 
+@login_required
 def registration_detail(request, pk):
     registration = get_object_or_404(
         Registration.objects.select_related(
@@ -628,6 +638,7 @@ def registration_detail(request, pk):
         }
     )
 
+@login_required
 def registration_export_excel(request):
     workbook = Workbook()
     worksheet = workbook.active
@@ -683,7 +694,7 @@ def registration_export_excel(request):
 
     return response
 
-
+@login_required
 def student_list(request):
     students = Student.objects.all()
 
@@ -693,7 +704,7 @@ def student_list(request):
         {"students": students}
     )
 
-
+@login_required
 def student_create(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -711,7 +722,7 @@ def student_create(request):
         {"form": form, "title": "New Student"},
     )
 
-
+@login_required
 def student_update(request, pk):
     student = get_object_or_404(Student, pk=pk)
 
@@ -735,6 +746,7 @@ def student_update(request, pk):
         },
     )
 
+@login_required
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
 
@@ -749,6 +761,7 @@ def student_delete(request, pk):
         {"student": student},
     )
 
+@login_required
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
     registrations = Registration.objects.filter(
@@ -760,6 +773,7 @@ def student_detail(request, pk):
         "registrations": registrations,
     })
 
+@login_required
 def student_export_excel(request):
     workbook = Workbook()
     worksheet = workbook.active
@@ -801,6 +815,7 @@ def student_export_excel(request):
 
     return response
 
+@login_required
 def Registration_serverside_data(request):
     draw = int(request.GET.get("draw", 1))
     start = int(request.GET.get("start", 0))
@@ -879,6 +894,7 @@ def Registration_serverside_data(request):
     })
 
 
+@login_required
 def Student_serverside_data(request):
     draw = int(request.GET.get("draw", 1))
     start = int(request.GET.get("start", 0))
@@ -953,6 +969,7 @@ def Student_serverside_data(request):
         "data": data,
     })
 
+@login_required
 def Course_serverside_data(request):
     draw = int(request.GET.get("draw", 1))
     start = int(request.GET.get("start", 0))
@@ -1017,7 +1034,7 @@ def Course_serverside_data(request):
         "data": data,
     })
 
-
+@login_required
 def Cohort_serverside_data(request):
     draw = int(request.GET.get("draw", 1))
     start = int(request.GET.get("start", 0))
@@ -1085,6 +1102,7 @@ def Cohort_serverside_data(request):
         "data": data,
     })
 
+@login_required
 def registration_receipt_pdf(request, pk):
     registration = get_object_or_404(
         Registration.objects.select_related(
@@ -1481,7 +1499,7 @@ def registration_receipt_pdf(request, pk):
 
     return response
 
-
+@login_required
 def payment_receipt_pdf(request, pk, payment_index):
     registration = get_object_or_404(
         Registration.objects.select_related(
@@ -1804,7 +1822,7 @@ def payment_receipt_pdf(request, pk, payment_index):
 
     return response
 
-
+@login_required
 def add_payment(request, pk):
     registration = get_object_or_404(
         Registration.objects.select_related(
@@ -1881,6 +1899,7 @@ def add_payment(request, pk):
     )
 
 
+@login_required
 def edit_payment(request, pk, payment_index):
     registration = get_object_or_404(
         Registration.objects.select_related(
